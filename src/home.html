@@ -1,0 +1,55 @@
+<html>  
+    <head>  
+        <title> Polling home</title>
+        <link rel="stylesheet" href="/css/design.css">
+    </head>
+    <body>
+        <h1>home page</h1>
+        <div id="the">
+            <label id="example">What is your question:</label>
+            <input type="text" id="ask"><br><br>
+            <div id="field"> 
+            Choices: <input type="text" class="question"><br>
+            Choices: <input type="text" class="question"><br>
+            Choices: <input type="text" class="question"><br>
+            </div>
+            <input type="button" value="add" id="ad">
+            <input type="button" value="Send" id="trigger">
+        </div>
+        <script>
+
+        var add= document.getElementById("ad")
+        var final= document.getElementById("trigger")
+        var choices=document.getElementById("field")
+        var main= document.getElementById("ask")
+
+        add.addEventListener("click",()=>{
+            choices.appendChild(document.createTextNode("Choices: "));
+            var input = document.createElement("input");
+                input.type = "text";
+                input.setAttribute("class", "question");
+                choices.appendChild(input);
+                choices.appendChild(document.createElement("br"));
+        })
+        final.addEventListener("click",()=>{
+            var qu=document.getElementsByClassName("question")
+            var x= main.value
+            var y=[]
+            for(var i=0;i<qu.length;i++)
+            {
+                y.push(qu[i].value)
+            }
+            var xhr = new XMLHttpRequest();
+            console.log(x)
+            console.log(y)
+            xhr.open("POST", "/shit",true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                    question:x,
+                    option:y
+                    }));
+            window.location.replace("/system");
+        })
+        </script>
+    </body>
+</html>

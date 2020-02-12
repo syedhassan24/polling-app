@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Polling system</title>
+    </head>
+    <body>
+        <h1>runnning</h1>
+        <form>
+            <p>Best team in the nba</p>
+            <input type="radio" name="one" value="a"class="goku"><label class="box">bulls</label>
+            <input type="radio" name="one" value="b"class="goku"><label class="box">celtics</label>
+            <input type="radio" name="one" value="c"class="goku"><label class="box">lakers</label>
+            <br>
+            <input type="submit" id="final">
+        </form>
+        <p id="result"></p>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket=io()
+            var checker=0;
+            var dil=[]
+            var show=document.getElementById("result")
+            var submit= document.getElementById("final")
+            var collection=document.getElementsByClassName("goku")
+            var coll=document.getElementsByClassName("box")
+            
+            submit.addEventListener("click",(e)=>{
+                e.preventDefault()
+                for(var i=0;i<collection.length;i++){
+                    if(collection[i].checked==true)
+                    {
+                       var send=""+(i+1)
+                       dil.push(send)
+                       socket.emit("vote",{main:dil,ind:checker})
+                    }
+                }
+                checker=1;
+            })
+            socket.on("vote",(data)=>{
+                var combine=""
+                var x;
+                for(var i in data)
+                {   
+                    x=parseInt(i)-1
+                    combine+=coll[x].textContent
+                    combine+=":"
+                    combine+=data[i]
+                    combine+" "
+                }
+               show.innerText=""
+               var node = document.createTextNode(combine);
+               show.appendChild(node)
+            })
+        
+        </script>
+    </body>
+</html>

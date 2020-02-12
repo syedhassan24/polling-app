@@ -1,0 +1,168 @@
+<html>
+    <head>
+        <title>polling running</title>
+        <link rel="stylesheet" href="/css/enhance.css">
+    </head>
+    <body>
+        <h1>Polling session</h1>
+        <div id="one">
+           
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var info;
+            var big
+            var fish
+            var xmlHttp = new XMLHttpRequest();
+             xmlHttp.open( "GET", "/ball", false ); 
+            xmlHttp.send( );
+            big=JSON.parse(xmlHttp.responseText)
+            info=big.prim
+            fish=big.second
+            var main=document.getElementById("one")
+            var para = document.createElement("p");
+            para.setAttribute("id","blue")
+            var node = document.createTextNode(info.question);
+            para.appendChild(node);
+            main.appendChild(para)
+            var br1 = document.createElement("br");
+            var br2 = document.createElement("br");
+            main.appendChild(br1)
+            for(var i=0;i<info.option.length;i++)
+            {
+                var input = document.createElement("input");
+                var display=document.createElement("label")
+                input.type = "radio";
+                input.name="one"
+                input.value=""+i
+                input.setAttribute("class", "goku");
+                display.innerHTML = info.option[i];
+                display.setAttribute("class", "box");
+                main.appendChild(input);
+                main.appendChild(display);
+            }
+            var sea = document.createElement("input");
+            sea.type = "submit";
+            sea.setAttribute("id", "final");
+            if(fish==0)
+            {
+              var exit= document.createElement("input");
+              exit.type = "button";
+              exit.value="end"
+              exit.setAttribute("id", "another");
+              main.appendChild(br1)
+              main.appendChild(exit)
+              main.appendChild(sea)
+            }
+            else{
+            main.appendChild(br1)
+            main.appendChild(sea)
+            }
+            var e=document.createElement("p")
+            var bat=document.createElement("p")
+            var parg = document.createElement("p");
+            var ice=document.createElement("p");
+            parg.setAttribute("id","result")
+            bat.setAttribute("id","done")
+            e.setAttribute("id","total")
+            ice.setAttribute("id","conc")
+            main.appendChild(e)
+            main.appendChild(bat)
+            main.appendChild(parg)
+            main.appendChild(ice)
+        </script>
+
+          <script>
+            var socket=io()
+            var checker=0;
+            var dil=[]
+            var tally=[]
+            var exp=document.getElementById("conc")
+            var show=document.getElementById("result")
+            var submit= document.getElementById("final")
+            var collection=document.getElementsByClassName("goku")
+            var coll=document.getElementsByClassName("box")
+            var close=document.getElementById("another")
+            
+            if(close!=null)
+            {
+            close.addEventListener("click",()=>{
+                socket.emit("pagal","blank")
+            })
+            }
+
+            submit.addEventListener("click",(e)=>{
+                e.preventDefault()
+                for(var i=0;i<collection.length;i++){
+                    if(collection[i].checked==true)
+                    {
+                       var send=""+(i+1)
+                       dil.push(send)
+                       socket.emit("vote",{main:dil,ind:checker})
+                    }
+                }
+                checker=1;
+            })
+            socket.on("vote",(data)=>{
+                var c=document.getElementById("done")
+                var combine=""
+                var x;
+                var max=-1
+                for(var i in data)
+                {   
+                    x=parseInt(i)-1
+                    combine+=coll[x].textContent
+                    combine+=":"
+                    combine+=data[i]
+                    combine+" "
+                    if(data[i]>max)
+                    {
+                        tally=[x]
+                        max=data[i] 
+                    }
+                    else if(max==data[i])
+                    {
+                        tally.push(x)
+                    }
+                }
+               show.innerText=""
+               var node = document.createTextNode(combine);
+               c.innerHTML="Final result"
+               console.log(tally+"cdsd")
+               if(tally.length==1)
+               {
+                exp.innerHTML="the winner is:  "+coll[tally[0]].textContent
+               }
+               else
+               {
+                   var f=""
+                for(var j=0;j<tally.length;j++)
+                {
+                    f+=coll[tally[j]].textContent
+                    if(j!=tally.length-1)
+                    {
+                        f+="and "
+                    }
+                }
+                exp.innerHTML="Current draw between: "+f
+               }
+               tally=[]
+               show.appendChild(node)
+            })
+
+            socket.on("sad",(value)=>{
+                var a=document.getElementById("total")
+                var b=document.getElementById("done")
+                a.innerHTML="Current users: "+value
+                b.innerHTML="Users have not finished votinh"
+                tally=[]
+                show.innerText=""
+                exp.innerHTML=""
+            })
+            socket.on("back",(value)=>{
+                socket.disconnect()
+                window.location.replace("/");
+            })
+        </script>
+    </body>
+</html>
