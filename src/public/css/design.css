@@ -1,0 +1,25 @@
+body {
+
+    background-color: rgb(0, 0, 0);
+}
+
+h1 {
+    text-align: center;
+    color: rgb(161, 89, 6);
+}
+
+#the{
+    margin:auto;
+    text-align: center;
+    padding: 10px;
+    width: 50%;
+    
+}
+
+#example{
+    color: rgb(161, 89, 6);
+}
+
+#field{
+    color: rgb(161, 89, 6);
+}

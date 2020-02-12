@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(0, 0, 0);
+}
+
+h1 {
+    text-align: center;
+    color: rgb(161, 89, 6);
+}
+
+#one{
+    margin:auto;
+    text-align: center;
+    padding: 10px;
+    width: 50%;
+    color: rgb(161, 89, 6);
+}
+
+#conc{
+    font-size: 38px;
+    color: darkgreen;
+}
+
+#blue{
+    font-size: 28px;
+}
